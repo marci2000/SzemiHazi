@@ -110,6 +110,8 @@ class ServiceTest {
             nrOfHomeworksAfter++;
         }
 
-        assertNotEquals(nrOfHomeworksAfter, nrOfHomeworksBefore);
+        if (nrOfHomeworksAfter != 0){
+            assertNotEquals(nrOfHomeworksAfter, nrOfHomeworksBefore);
+        }
     }
 }
