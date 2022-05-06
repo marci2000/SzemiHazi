@@ -18,6 +18,7 @@ import validation.GradeValidator;
 import validation.HomeworkValidator;
 import validation.StudentValidator;
 import validation.Validator;
+
 import static org.junit.Assert.*;
 
 class ServiceTest {
@@ -34,6 +35,7 @@ class ServiceTest {
         GradeXMLRepository fileRepository3 = new GradeXMLRepository(gradeValidator, "grades.xml");
 
         service = new Service(fileRepository1, fileRepository2, fileRepository3);
+        service.saveStudent("18", "Hanna", 531);
 
     }
 
@@ -41,22 +43,22 @@ class ServiceTest {
     void saveStudent() {
         Iterable<Student> allStudents = service.findAllStudents();
         int nrOfStudentsBefore = 0;
+        int maxID = 0;
         for (Student i : allStudents) {
             nrOfStudentsBefore++;
+            if (Integer.parseInt(i.getID()) > maxID) {
+                maxID = Integer.parseInt(i.getID());
+            }
         }
-
-        service.saveStudent("18", "Hanna", 531);
-
+        maxID++;
+        service.saveStudent(String.valueOf(maxID), "Hanna", 531);
         allStudents = service.findAllStudents();
         int nrOfStudentsAfter = 0;
         for (Student i : allStudents) {
             nrOfStudentsAfter++;
         }
-
         assertEquals(nrOfStudentsAfter, nrOfStudentsBefore+1);
     }
-
-
 
     @ParameterizedTest
     @ValueSource(strings = "18")
@@ -69,11 +71,15 @@ class ServiceTest {
     void deleteStudent() {
         Iterable<Student> allStudents = service.findAllStudents();
         int nrOfStudentsBefore = 0;
+        int maxID = 0;
         for (Student i : allStudents) {
             nrOfStudentsBefore++;
+            if (Integer.parseInt(i.getID()) > maxID) {
+                maxID = Integer.parseInt(i.getID());
+            }
         }
 
-        service.deleteStudent("18");
+        service.deleteStudent(String.valueOf(maxID));
 
         allStudents = service.findAllStudents();
         int nrOfStudentsAfter = 0;
@@ -88,11 +94,15 @@ class ServiceTest {
     void deleteHomework() {
         Iterable<Homework> allHomeworks = service.findAllHomework();
         int nrOfHomeworksBefore = 0;
+        int maxID = 0;
         for (Homework i : allHomeworks) {
             nrOfHomeworksBefore++;
+            if (Integer.parseInt(i.getID()) > maxID) {
+                maxID = Integer.parseInt(i.getID());
+            }
         }
 
-        service.deleteHomework("1");
+        service.deleteHomework(String.valueOf(maxID));
 
         allHomeworks = service.findAllHomework();
         int nrOfHomeworksAfter = 0;
